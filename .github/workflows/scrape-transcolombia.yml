@@ -1,0 +1,39 @@
+name: Scrape TRANSCOLOMBIA Routes
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '27 8 * * 1'
+permissions:
+  contents: write
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch routes and export GeoJSON and stops
+        id: scrape
+        continue-on-error: true
+        run: python scripts/scrape_transcolombia.py
+      - name: Upload results and raw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transcolombia-route-data
+          path: data/sources/transcolombia/
+          if-no-files-found: warn
+      - name: Commit updated research data
+        if: steps.scrape.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sources/transcolombia/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: refresh TRANSCOLOMBIA route maps and stops"
+            git push
+          fi
+      - name: Fail if no usable route data was retrieved
+        if: steps.scrape.outcome != 'success'
+        run: exit 1
