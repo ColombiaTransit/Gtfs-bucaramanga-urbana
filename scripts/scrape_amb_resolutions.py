@@ -28,7 +28,7 @@ def candidates(row,base):
             if not v or v.startswith(("javascript:","#","mailto:")): continue
             u=urljoin(base,v)
             if allowed(u) and u not in found: found.append(u)
-        for v in re.findall(r"https?://[^\\s\\x22\\x27)]+|/\\?wpdmdl=\\d+|/download/[^\\s\\x22\\x27)]+",el.get("onclick","")):
+        for v in re.findall(r"https?://[^\s\x22\x27)]+|/\?wpdmdl=\d+|/download/[^\s\x22\x27)]+",el.get("onclick","")):
             u=urljoin(base,v)
             if allowed(u) and u not in found: found.append(u)
     return found
@@ -95,7 +95,7 @@ def main():
         for item in records(url,page["html"]):
             key=(item["title"],tuple(item["download_candidates"]))
             if key in seen:continue
-            seen.add(key);title=norm(item["title"]);num=re.search(r"resolucion\\s*(?:no\\.?|numero)?\\s*0*(\\d{1,6})\\b",title);year=re.search(r"\\b(20\\d{2}|19\\d{2})\\b",title)
+            seen.add(key);title=norm(item["title"]);num=re.search(r"resolucion\s*(?:no\.?|numero)?\s*0*(\d{1,6})\b",title);year=re.search(r"\b(20\d{2}|19\d{2})\b",title)
             item.update({"resolution_number":num.group(1).zfill(6) if num else "unknown","resolution_year":year.group(1) if year else "unknown","id":hashlib.sha256((url+item["title"]).encode()).hexdigest()[:16]});items.append(item)
     items.sort(key=lambda x:(x["resolution_year"],x["resolution_number"],x["title"]),reverse=True)
     for i,item in enumerate(items):
