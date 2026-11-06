@@ -1,0 +1,6 @@
+route_code,route_name,description,distance_km,duration_minutes,frequency_min_minutes,frequency_max_minutes,points_of_interest,source_url,service_category
+P1,La Cumbre - Centro,Conexión directa: La Cumbre - Centro,18,100,12,18,"La Cumbre; Estación Provenza Oriental; Puerta del Sol; Diagonal 15; Estación Quebradaseca",https://www.cotrander.com/rutas/rutas-en-convenio,Rutas Complementarias
+P2,La Cumbre - UIS por Cañaveral,Enlace La Cumbre - UIS por Cañaveral,25,110,12,18,"La Cumbre; Villabel; Parque Caracolí; Estación Provenza Occ.; P. Estación UIS",https://www.cotrander.com/rutas/rutas-en-convenio,Rutas Complementarias
+P8,Tejaditos - UIS,Conecta Tejaditos con la UIS,50,160,8,12,"Tejaditos; Portal del Valle; UDI; Megamall; Plaza Guarín; UIS",https://www.cotrander.com/rutas/rutas-en-convenio,Rutas Complementarias
+P14,Puente Tierra - Ciudad Valencia,Puente Tierra - Ciudad Valencia,40,145,15,25,"Puente Tierra; Centro; Carrera 33; Ciudad Valencia; Falabella",https://www.cotrander.com/rutas/rutas-en-convenio,Rutas Complementarias
+RD27,Portal del Valle - UIS (Directo),Portal del Valle - UIS (Directo),48,150,7,9,"Portal del Valle; Cañaveral; Estación Provenza; Viaducto; P. Estación UIS",https://www.cotrander.com/rutas/rutas-en-convenio,Rutas Complementarias
