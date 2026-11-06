@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Archive public AMB resolutions, retaining source evidence and OCR backlog."""
-import argparse, csv, hashlib, json, re, time, unicodedata
+import argparse, csv, hashlib, json, re, time, unicodedata, subprocess, shutil, tempfile
 from pathlib import Path
 from datetime import datetime, timezone
 from urllib.parse import urljoin, urlparse
@@ -78,16 +78,58 @@ def download(s,item,folder):
             return {"status":"downloaded","source_url":url,"sha256":sha,"bytes":len(data),"pdf_file":str(path),"attempts":attempts}
         except requests.RequestException as e:attempts.append({"url":url,"error":str(e)})
     return {"status":"download_failed" if item["download_candidates"] else "no_download_link","attempts":attempts}
-def extract(path,folder):
+def extract(path,folder,ocr=True):
+    """OCR only pages lacking usable embedded text; never overwrite the original PDF."""
     try:
         import fitz
+        pages_meta = []
+        combined = []
         with fitz.open(path) as doc:
-            texts=[p.get_text("text",sort=True) for p in doc];pages=len(doc)
-        content="\n\n".join(texts);target=folder/(Path(path).stem+".txt");target.write_text(content,encoding="utf-8")
-        return {"pages":pages,"text_chars":len(content.strip()),"needs_ocr":len(content.strip())<max(100,pages*60),"text_file":str(target)}
-    except Exception as e:return {"needs_ocr":True,"error":str(e)}
+            for page_no, page in enumerate(doc, start=1):
+                embedded = page.get_text("text", sort=True)
+                meaningful = len(re.sub(r"\\s+", "", embedded))
+                # An image-only or nearly empty page is a candidate for OCR.
+                needs_ocr = meaningful < 60
+                page_text = embedded
+                method = "embedded"
+                error = None
+                if needs_ocr and ocr:
+                    if not shutil.which("tesseract"):
+                        error = "tesseract_unavailable"
+                    else:
+                        try:
+                            with tempfile.TemporaryDirectory() as tmp:
+                                image = Path(tmp) / "page.png"
+                                image.write_bytes(page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False).tobytes("png"))
+                                result = subprocess.run(
+                                    ["tesseract", str(image), "stdout", "-l", "spa", "--psm", "3"],
+                                    capture_output=True, text=True, timeout=90, check=False
+                                )
+                                if result.returncode:
+                                    error = "tesseract_exit_" + str(result.returncode) + ": " + result.stderr[:250]
+                                elif len(re.sub(r"\\s+", "", result.stdout)) > meaningful:
+                                    page_text = result.stdout
+                                    method = "ocr"
+                                else:
+                                    error = "ocr_no_improvement"
+                        except (OSError, subprocess.TimeoutExpired) as exc:
+                            error = str(exc)
+                unresolved = len(re.sub(r"\\s+", "", page_text)) < 60
+                pages_meta.append({"page": page_no, "method": method, "embedded_chars": meaningful,
+                                   "text_chars": len(page_text.strip()), "needs_ocr": unresolved,
+                                   "ocr_attempted": needs_ocr and ocr, "ocr_error": error})
+                combined.append(f"--- Page {page_no} ({method}) ---\\n{page_text}")
+        target = folder / (Path(path).stem + ".txt")
+        target.write_text("\\n\\n".join(combined), encoding="utf-8")
+        return {"pages": len(pages_meta), "text_chars": sum(p["text_chars"] for p in pages_meta),
+                "ocr_pages": sum(p["method"] == "ocr" for p in pages_meta),
+                "ocr_attempted_pages": sum(p["ocr_attempted"] for p in pages_meta),
+                "needs_ocr": any(p["needs_ocr"] for p in pages_meta),
+                "page_results": pages_meta, "text_file": str(target)}
+    except Exception as e:
+        return {"needs_ocr": True, "error": str(e)}
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--max-archives",type=int,default=24);ap.add_argument("--max-documents",type=int,default=0);ap.add_argument("--output",default="data/sources/amb_resolutions");args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument("--max-archives",type=int,default=24);ap.add_argument("--max-documents",type=int,default=0);ap.add_argument("--output",default="data/sources/amb_resolutions");ap.add_argument("--no-ocr",action="store_true",help="Only extract embedded PDF text");args=ap.parse_args()
     root=Path(args.output);root.mkdir(parents=True,exist_ok=True);pdf=root/"pdf";txt=root/"text";pdf.mkdir(exist_ok=True);txt.mkdir(exist_ok=True)
     s=requests.Session();s.headers.update({"User-Agent":"ColombiaTransit-GTFS-Research/1.0","Accept":"text/html,application/pdf,*/*"})
     pages=archives(s,args.max_archives);items=[];seen=set()
@@ -101,9 +143,9 @@ def main():
     for i,item in enumerate(items):
         if args.max_documents and i>=args.max_documents:item["download"]={"status":"not_attempted_limit"};continue
         item["download"]=download(s,item,pdf)
-        if item["download"]["status"]=="downloaded":item["extraction"]=extract(item["download"]["pdf_file"],txt)
+        if item["download"]["status"]=="downloaded":item["extraction"]=extract(item["download"]["pdf_file"],txt,ocr=not args.no_ocr)
         if i%10==0:print("Processed",i+1,"/",len(items),flush=True)
-    summary={"checked_at_utc":datetime.now(timezone.utc).isoformat(),"archives":[{"url":u,"status":v["status"],"error":v.get("error")} for u,v in pages.items()],"discovered":len(items),"downloaded":sum(x.get("download",{}).get("status")=="downloaded" for x in items),"needs_ocr":sum(x.get("extraction",{}).get("needs_ocr",False) for x in items),"no_download_link":sum(not x["download_candidates"] for x in items)}
+    summary={"checked_at_utc":datetime.now(timezone.utc).isoformat(),"archives":[{"url":u,"status":v["status"],"error":v.get("error")} for u,v in pages.items()],"discovered":len(items),"downloaded":sum(x.get("download",{}).get("status")=="downloaded" for x in items),"needs_ocr":sum(x.get("extraction",{}).get("needs_ocr",False) for x in items),"ocr_pages":sum(x.get("extraction",{}).get("ocr_pages",0) for x in items),"ocr_attempted_pages":sum(x.get("extraction",{}).get("ocr_attempted_pages",0) for x in items),"no_download_link":sum(not x["download_candidates"] for x in items)}
     (root/"manifest.json").write_text(json.dumps({"summary":summary,"documents":items},ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     with (root/"index.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.DictWriter(f,fieldnames=["id","resolution_number","resolution_year","title","published_date","archive_url","download_status","source_url","sha256","needs_ocr"]);w.writeheader()
