@@ -1,0 +1,51 @@
+name: Scrape UNITRANSA routes
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 8 * * 1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-unitransa
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install parser
+        run: python -m pip install 'json5==0.12.1'
+      - name: Download original HTML
+        run: |
+          mkdir -p data/sources/raw
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 120 \
+            -A 'Mozilla/5.0 (compatible; ColombiaTransit-GTFS-Research/1.0)' \
+            'https://rutas.unitransa.com/mapa_rutas.php' \
+            -o data/sources/raw/unitransa_mapa_rutas.html
+      - name: Extract RUTAS and route geometry
+        run: python scripts/scrape_unitransa.py --html data/sources/raw/unitransa_mapa_rutas.html
+      - name: Upload extraction artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unitransa-source-extraction
+          path: |
+            data/sources/raw/unitransa_mapa_rutas.html
+            data/sources/unitransa/
+          if-no-files-found: warn
+      - name: Commit source files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/sources/raw/unitransa_mapa_rutas.html data/sources/unitransa/
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh UNITRANSA RUTAS source and geometry'
+            git push
+          fi
