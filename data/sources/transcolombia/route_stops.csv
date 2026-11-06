@@ -1,0 +1,105 @@
+route_code,pax_code,seq,lat,lon,barrio,source_url
+CE24,R24L,2,7.175797229486,-73.134101645,Colorados Norte,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,3,7.17584906713831,-73.133430823013,Colorados Norte,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,4,7.1553133799506,-73.1341802634,Claveriano,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,5,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,6,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,7,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,8,7.0896226105222,-73.144061133485,Manzanares,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,9,7.0990864901919,-73.129460283041,Mutis,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,10,7.0990166198805,-73.127396726722,Los Héroes,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,11,7.1041147017278,-73.127771490441,Ciudadela Real de Minas,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,12,7.1104539885519,-73.120765607169,La Concordia,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,13,7.1214473963018,-73.127806038498,Centro,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,14,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R24L
+CE24,R24L,15,7.17561226584894,-73.1341308689284,Colorados Norte,https://transcolombia.com.co/api/pax/route/R24L
+CEP24,R24P,2,7.1757333906524,-73.133743270502,Colorados Norte,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,3,7.1553133799506,-73.1341802634,Claveriano,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,4,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,5,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,6,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,7,7.0896226105222,-73.144061133485,Manzanares,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,8,7.0990864901919,-73.129460283041,Mutis,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,9,7.0990166198805,-73.127396726722,Los Héroes,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,10,7.1041147017278,-73.127771490441,Ciudadela Real de Minas,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,11,7.1104539885519,-73.120765607169,La Concordia,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,12,7.1214473963018,-73.127806038498,Centro,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,13,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R24P
+CEP24,R24P,14,7.175749357859,-73.13377545701,Colorados Norte,https://transcolombia.com.co/api/pax/route/R24P
+CH15,R15,2,7.145266392606,-73.124116003978,La Independencia,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,3,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,4,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,5,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,6,7.0728949763083,-73.126835260189,Comuna 11 - Sur,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,7,7.0823710290512,-73.122179400668,El Rocío,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,8,7.1152668642086,-73.123038418068,La Concordia,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,9,7.1214473963018,-73.127806038498,Centro,https://transcolombia.com.co/api/pax/route/R15
+CH15,R15,10,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R15
+CI17,R17,2,7.1495951987667,-73.135215099275,Kennedy,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,3,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,4,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,5,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,6,7.1166955630417,-73.111059693059,Cabecera del Llano,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,7,7.08631865006801,-73.1109221436845,Provenza,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,8,7.0814486032835,-73.134494515196,Comuna 11 - Sur,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,9,7.0822803797696,-73.130514082143,Comuna 11 - Sur,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,10,7.0823710290512,-73.122179400668,El Rocío,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,11,7.1018894864072,-73.107377352094,Los Guayacanes,https://transcolombia.com.co/api/pax/route/R17
+CI17,R17,12,7.1371640627502,-73.122254457651,Universidad,https://transcolombia.com.co/api/pax/route/R17
+NC21,NC21,1,7.17584906713831,-73.133430823013,Colorados Norte,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,2,7.1628413198143,-73.1407328323587,Café Madrid,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,3,7.1495951987667,-73.135215099275,Kennedy,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,4,7.1462572851258,-73.130885962714,Kennedy,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,5,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,6,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,7,7.1372518452555,-73.122197091579,Universidad,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,8,7.1264107591715,-73.112829408677,Quinta Diana,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,9,7.1109924283315,-73.110046210707,Campestre,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,10,7.0896226105222,-73.144061133485,Manzanares,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,11,7.0990864901919,-73.129460283041,Mutis,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,12,7.0990166198805,-73.127396726722,Los Héroes,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,13,7.1041147017278,-73.127771490441,Ciudadela Real de Minas,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,14,7.1153040407454,-73.115069108956,Sotomayor,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,15,7.1163541230654,-73.112175327277,Sotomayor,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,16,7.1346305857124,-73.117921624835,San Alonso,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,17,7.13902058873619,-73.1201417050266,Mutualidad,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,18,7.1371640627502,-73.122254457651,Universidad,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,19,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/NC21
+NC21,NC21,20,7.17561226584894,-73.1341308689284,Colorados Norte,https://transcolombia.com.co/api/pax/route/NC21
+R23,R23,2,7.1502221934079,-73.130863291743,Kennedy,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,3,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,4,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,5,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,6,7.0814486032835,-73.134494515196,Comuna 11 - Sur,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,7,7.0822803797696,-73.130514082143,Comuna 11 - Sur,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,8,7.0818199351488,-73.128473002663,Comuna 11 - Sur,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,9,7.0823710290512,-73.122179400668,El Rocío,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,10,7.1033058417692,-73.12280662579,Ciudadela Real de Minas,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,11,7.1104539885519,-73.120765607169,La Concordia,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,12,7.1214473963018,-73.127806038498,Centro,https://transcolombia.com.co/api/pax/route/R23
+R23,R23,13,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/R23
+V14,V14,2,7.1845202801721,-73.132724626329,Villa Luz Norte,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,3,7.17584906713831,-73.133430823013,Colorados Norte,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,4,7.1553133799506,-73.1341802634,Claveriano,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,5,7.14624720659042,-73.1298378519136,Olas II,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,6,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,7,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,8,7.1264107591715,-73.112829408677,Quinta Diana,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,9,7.0724337921238,-73.104965723108,Comuna Cañaveral - Versalles,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,10,7.0829289333587,-73.101699650288,Comuna Villabel - Santa Ana,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,11,7.1018894864072,-73.107377352094,Los Guayacanes,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,12,7.1183019926454,-73.111342084338,Cabecera del Llano,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,13,7.1208613182189,-73.122877319605,Centro,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,14,7.1180507634071,-73.130630551693,García Rovira,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,15,7.1400352876008,-73.133092248283,Chapinero,https://transcolombia.com.co/api/pax/route/V14
+V14,V14,16,7.1947793515606,-73.129179721212,Villa Caramelo,https://transcolombia.com.co/api/pax/route/V14
+AN3,AN3,1,7.149652102661,-73.139902785739,María Paz,https://transcolombia.com.co/api/pax/route/AN3
+AN3,AN3,2,7.1474818226639,-73.132398359961,Kennedy,https://transcolombia.com.co/api/pax/route/AN3
+AN3,AN3,4,7.1449641634769,-73.133388095087,Villa Mercedes,https://transcolombia.com.co/api/pax/route/AN3
+AN3,AN3,5,7.149652102661,-73.139902785739,María Paz,https://transcolombia.com.co/api/pax/route/AN3
+P19,P19,1,7.1621171174335,-73.139749073304,Café Madrid,https://transcolombia.com.co/api/pax/route/P19
+P19,P19,2,7.1495951987667,-73.135215099275,Kennedy,https://transcolombia.com.co/api/pax/route/P19
+P19,P19,3,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/P19
+P19,P19,4,7.0752450861634,-73.112055630113,Palomitas,https://transcolombia.com.co/api/pax/route/P19
+P19,P19,5,7.123911952787,-73.128810577053,Granada,https://transcolombia.com.co/api/pax/route/P19
+P19,P19,6,7.1621171174335,-73.139749073304,Café Madrid,https://transcolombia.com.co/api/pax/route/P19

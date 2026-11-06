@@ -1,0 +1,102 @@
+{
+  "source": "https://transcolombia.com.co/api/pax/route/",
+  "routes_requested": 10,
+  "routes_with_geometry": 10,
+  "stop_records": 104,
+  "excluded_no_pax_code": [
+    "V15",
+    "CP24"
+  ],
+  "routes": [
+    {
+      "route_code": "CE24",
+      "pax_code": "R24L",
+      "source_url": "https://transcolombia.com.co/api/pax/route/R24L",
+      "status": "ok",
+      "geometry_points": 473,
+      "stops": 14,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "CEP24",
+      "pax_code": "R24P",
+      "source_url": "https://transcolombia.com.co/api/pax/route/R24P",
+      "status": "ok",
+      "geometry_points": 489,
+      "stops": 13,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "CH15",
+      "pax_code": "R15",
+      "source_url": "https://transcolombia.com.co/api/pax/route/R15",
+      "status": "ok",
+      "geometry_points": 345,
+      "stops": 9,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "CI17",
+      "pax_code": "R17",
+      "source_url": "https://transcolombia.com.co/api/pax/route/R17",
+      "status": "ok",
+      "geometry_points": 332,
+      "stops": 11,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "NC21",
+      "pax_code": "NC21",
+      "source_url": "https://transcolombia.com.co/api/pax/route/NC21",
+      "status": "ok",
+      "geometry_points": 482,
+      "stops": 20,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "R23",
+      "pax_code": "R23",
+      "source_url": "https://transcolombia.com.co/api/pax/route/R23",
+      "status": "ok",
+      "geometry_points": 363,
+      "stops": 12,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "V14",
+      "pax_code": "V14",
+      "source_url": "https://transcolombia.com.co/api/pax/route/V14",
+      "status": "ok",
+      "geometry_points": 433,
+      "stops": 15,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "AN3",
+      "pax_code": "AN3",
+      "source_url": "https://transcolombia.com.co/api/pax/route/AN3",
+      "status": "ok",
+      "geometry_points": 343,
+      "stops": 4,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "P19",
+      "pax_code": "P19",
+      "source_url": "https://transcolombia.com.co/api/pax/route/P19",
+      "status": "ok",
+      "geometry_points": 356,
+      "stops": 6,
+      "invalid_points": 0
+    },
+    {
+      "route_code": "P8",
+      "pax_code": "P8",
+      "source_url": "https://transcolombia.com.co/api/pax/route/P8",
+      "status": "ok",
+      "geometry_points": 311,
+      "stops": 0,
+      "invalid_points": 0
+    }
+  ]
+}
