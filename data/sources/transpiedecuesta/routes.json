@@ -1,0 +1,44 @@
+[
+  {
+    "key": "ruta49-kennedy",
+    "label": "Ruta 49 Kennedy",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta49-kennedy-ida-scaled.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta49-kennedy-regreso-scaled.jpg"
+  },
+  {
+    "key": "ruta49-puente",
+    "label": "Ruta 49 Puente Tierra",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta49-puente-ida.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta49-puente-regreso.jpg"
+  },
+  {
+    "key": "ruta51",
+    "label": "Ruta 51 Floridablanca – Carrera 21",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta51-ida.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta51-regreso.jpg"
+  },
+  {
+    "key": "ruta52-terminal",
+    "label": "Ruta 52 Carrera 21 – Terminal",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta52-terminal-ida.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta52-terminal-regreso.jpg"
+  },
+  {
+    "key": "ruta52-tejaditos",
+    "label": "Ruta 52 Carrera 21 (Tejaditos)",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta52-tejaditos-ida.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta52-tejaditos-regreso.jpg"
+  },
+  {
+    "key": "ruta53",
+    "label": "Ruta 53 Nueva Colombia Carrera 21",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta53-ida.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta53-regreso.jpg"
+  },
+  {
+    "key": "ruta56",
+    "label": "Ruta 56 La Feria – Zafiro",
+    "ida_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta56-ida.jpg",
+    "regreso_url": "https://transpiedecuesta.com/wp-content/uploads/2025/06/ruta56-regreso.jpg"
+  }
+]
