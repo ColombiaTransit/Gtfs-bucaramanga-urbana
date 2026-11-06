@@ -1,0 +1,33 @@
+name: Scrape Transpiedecuesta route maps
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '25 8 * * 1'
+permissions:
+  contents: write
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch route list, validate JPG URLs and archive maps
+        run: python scripts/scrape_transpiedecuesta.py
+      - name: Upload research archive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transpiedecuesta-source-maps
+          path: data/sources/transpiedecuesta/
+          if-no-files-found: warn
+      - name: Commit source evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sources/transpiedecuesta/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: refresh Transpiedecuesta route map sources"
+            git push
+          fi
