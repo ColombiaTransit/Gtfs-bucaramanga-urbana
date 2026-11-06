@@ -1,0 +1,13 @@
+route_code,route_name,source_url,geometry_status,frequency_status,notes
+CE24,Colorados,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+CEP24,Colorados P,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+CH15,Chapinero,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+CI17,Cafe Inem,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+NC21,Ciudad Norte,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+R23,Villa Rosa,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+V14,Valencia,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+AN3,AN3,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+P19,P19,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+V15,V15,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+CP24,CP24,https://transcolombia.com.co/,not_extracted,not_published_on_overview,
+P8,P8,https://transcolombia.com.co/,not_extracted,not_published_on_overview,Potential overlap with UNITRANSA and COTRANDER; compare variants before GTFS deduplication
