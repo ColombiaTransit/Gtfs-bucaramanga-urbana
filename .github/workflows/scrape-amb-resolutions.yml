@@ -1,0 +1,53 @@
+name: Scrape AMB resolutions
+on:
+  workflow_dispatch:
+    inputs:
+      max_documents:
+        description: 'Maximum documents (0 = all)'
+        default: '0'
+        required: false
+      max_archives:
+        description: 'Maximum archive pages'
+        default: '24'
+        required: false
+  schedule:
+    - cron: '10 9 * * 1'
+permissions:
+  contents: write
+concurrency:
+  group: scrape-amb-resolutions
+  cancel-in-progress: false
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 pymupdf
+      - name: Inventory and archive AMB resolutions
+        env:
+          MAX_DOCUMENTS: ${{ github.event.inputs.max_documents || '0' }}
+          MAX_ARCHIVES: ${{ github.event.inputs.max_archives || '24' }}
+        run: python scripts/scrape_amb_resolutions.py --max-documents "$MAX_DOCUMENTS" --max-archives "$MAX_ARCHIVES"
+      - name: Upload source documents and extracted text
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-resolutions-archive
+          path: data/sources/amb_resolutions/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Commit source inventory
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sources/amb_resolutions/manifest.json data/sources/amb_resolutions/index.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "data: refresh AMB resolution inventory"
+            git push
+          fi
