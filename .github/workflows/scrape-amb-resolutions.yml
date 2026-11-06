@@ -28,7 +28,9 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: pip install requests beautifulsoup4 pymupdf
-      - name: Install Spanish OCR language pack\n        run: sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-spa\n      - name: Inventory and archive AMB resolutions
+      - name: Install Spanish OCR language pack
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-spa
+      - name: Inventory and archive AMB resolutions
         env:
           MAX_DOCUMENTS: ${{ github.event.inputs.max_documents || '0' }}
           MAX_ARCHIVES: ${{ github.event.inputs.max_archives || '24' }}
