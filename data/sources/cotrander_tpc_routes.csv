@@ -1,0 +1,7 @@
+route_code,route_name,distance_km,duration_minutes,frequency_min_minutes,frequency_max_minutes,source_url
+26,CUMBRE,25,100,6,10,https://www.cotrander.com/rutas/rutas-tpc
+07,LIMONCITO,23,110,6,10,https://www.cotrander.com/rutas/rutas-tpc
+25,BETANIA,40,135,8,12,https://www.cotrander.com/rutas/rutas-tpc
+36,IGSABELAR,24,110,8,12,https://www.cotrander.com/rutas/rutas-tpc
+33,CARACOLÍ,32,130,7,12,https://www.cotrander.com/rutas/rutas-tpc
+22,MARIA PAZ,10,30,20,30,https://www.cotrander.com/rutas/rutas-tpc
