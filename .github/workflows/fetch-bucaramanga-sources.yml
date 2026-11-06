@@ -1,0 +1,52 @@
+name: Fetch Bucaramanga source data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 1 * *'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download public source datasets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/sources/raw
+          curl --fail --location --retry 3 --connect-timeout 20 \
+            'https://www.datos.gov.co/resource/5syf-tgsx.json?$limit=50000' \
+            -o data/sources/raw/5syf-tgsx.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('data/sources/raw/5syf-tgsx.json')
+          rows = json.loads(p.read_text())
+          if not isinstance(rows, list) or not rows:
+              raise SystemExit('Socrata response missing/empty')
+          print(f'Downloaded {len(rows)} route/operator records')
+          PY
+          curl --fail --location --retry 3 --connect-timeout 20 \
+            'https://rutas.unitransa.com/mapa_rutas.php' \
+            -o data/sources/raw/unitransa_mapa_rutas.html
+      - name: Commit refreshed sources
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/sources/raw/
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh Bucaramanga source snapshots'
+            git push
+          fi
+      - name: Upload source artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bucaramanga-source-snapshots
+          path: data/sources/raw/
+          if-no-files-found: warn
