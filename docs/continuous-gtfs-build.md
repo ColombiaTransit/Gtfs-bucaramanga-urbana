@@ -33,3 +33,16 @@ python scripts/build_continuous_gtfs.py --manifest data/gtfs_routes.csv --kml-di
 The workflow `Build and validate Bucaramanga GTFS` invokes the MobilityData GTFS Schedule Validator after generation and uploads the feed and validation report as artifacts. **The workflow has not yet been successfully run against the 45-route production manifest.** A successful validator run must be verified before publishing.
 
 Next integration tasks: map the existing AMB source register and KML archive into the manifest; verify route direction, trip duration, holiday service semantics and validator notices; do not silently synthesize missing legal schedule data.
+
+## AMB source integration (2026-11-07)
+
+The workflow now prepares `dist/gtfs_routes.csv` automatically using `scripts/prepare_amb_gtfs.py`, reading the **existing** committed `data/sources/amb_tpc_routes/routes.csv` and `kml_manifest.json`, and the 45 corresponding KML files under `data/sources/amb_tpc_routes/kml/`. No new scraping or manual copying is required.
+
+**Explicit provisional modelling choices:** the AMB `frequency_low_demand_min` and `first_departure_low_demand` / `last_departure_low_demand` fields are used for Saturday, Sunday and public holidays. The published peak/off-peak headways and standard service hours are used for ordinary weekdays. Trip duration is estimated from AMB route length at 18 km/h, rounded up, with a minimum of 10 minutes. These values are **not official travel times** and must be reviewed before publication. The converter fails on missing/invalid data and checks route-to-KML matching. The MobilityData validator is invoked after the build; successful completion has not yet been verified.
+
+Run locally:
+
+```bash
+python scripts/prepare_amb_gtfs.py --source data/sources/amb_tpc_routes --output dist/gtfs_routes.csv
+python scripts/build_continuous_gtfs.py --manifest dist/gtfs_routes.csv --kml-dir data/sources/amb_tpc_routes --output dist/gtfs.zip --days 365
+```
