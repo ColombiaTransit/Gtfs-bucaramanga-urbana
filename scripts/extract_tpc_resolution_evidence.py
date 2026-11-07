@@ -31,17 +31,17 @@ def main():
             row["review_notes"]="Archived extracted text unavailable"
             continue
         content=text_path.read_text(encoding="utf-8",errors="replace")
-        page_chunks=re.split(r"(?=--- Page \\d+ \\([^)]*\\) ---)",content)
+        page_chunks=re.split(r"(?=--- Page \d+ \([^)]*\) ---)",content)
         evidence=[]
         for chunk in page_chunks:
-            page=re.search(r"--- Page (\\d+)",chunk)
+            page=re.search(r"--- Page (\d+)",chunk)
             if not page:continue
             hits=[]
             for kind,pattern in [
-                ("route",r"\\b(?:ruta|recorrido|itinerario|trayecto)s?\\b"),
-                ("frequency",r"\\b(?:frecuencia|intervalo)s?\\b"),
-                ("hours",r"\\b(?:horario|primer\\s+despacho|ultimo\\s+despacho|último\\s+despacho)s?\\b"),
-                ("legal",r"\\b(?:modifica|deroga|revoca|sustituye|vigencia)\\b")]:
+                ("route",r"\b(?:ruta|recorrido|itinerario|trayecto)s?\b"),
+                ("frequency",r"\b(?:frecuencia|intervalo)s?\b"),
+                ("hours",r"\b(?:horario|primer\s+despacho|ultimo\s+despacho|último\s+despacho)s?\b"),
+                ("legal",r"\b(?:modifica|deroga|revoca|sustituye|vigencia)\b")]:
                 if re.search(pattern,chunk,re.I):hits.append(kind)
             if hits:evidence.append({"page":int(page.group(1)),"topics":hits})
         row["content_review_status"]="pending_manual_validation"
@@ -51,6 +51,6 @@ def main():
     with REGISTER.open("w",newline="",encoding="utf-8") as f:
         w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
     out=Path("data/registers/amb_extraction_review.json")
-    out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+    out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("Indexed",len(report),"documents; manual verification still required")
 if __name__=="__main__":main()
