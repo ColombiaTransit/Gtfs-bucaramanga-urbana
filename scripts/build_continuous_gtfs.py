@@ -85,7 +85,11 @@ def meters(a, b):
 
 
 def intervals(row, day_type):
-    first, last = clock(row["first_departure"]), clock(row["last_departure"])
+    if day_type in ("saturday", "sunday"):
+        first = clock(row.get("first_departure_low_demand") or row["first_departure"])
+        last = clock(row.get("last_departure_low_demand") or row["last_departure"])
+    else:
+        first, last = clock(row["first_departure"]), clock(row["last_departure"])
     if last <= first:
         last += 86400
     if day_type == "sunday":
