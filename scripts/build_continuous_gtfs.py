@@ -27,6 +27,7 @@ TABLES = {
     "trips.txt": ["route_id", "service_id", "trip_id", "shape_id"],
     "stop_times.txt": ["trip_id", "arrival_time", "departure_time", "stop_id", "stop_sequence", "shape_dist_traveled"],
     "shapes.txt": ["shape_id", "shape_pt_lat", "shape_pt_lon", "shape_pt_sequence", "shape_dist_traveled"],
+    "calendar.txt": ["service_id", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "start_date", "end_date"],
     "calendar_dates.txt": ["service_id", "date", "exception_type"],
     "frequencies.txt": ["trip_id", "start_time", "end_time", "headway_secs", "exact_times"],
 }
@@ -154,13 +155,30 @@ def write_feed(manifest, kml_dir, output, start, days):
             data["stops.txt"].append(dict(stop_id=sid, stop_name=name, stop_lat=lat, stop_lon=lon))
         for typ in ("weekday", "saturday", "sunday"):
             sid = f"{rid}_{typ}"
-            # Date-specific calendar: holiday precedence cannot overlap.
+            # Regular weekly calendar, with Colombian holidays treated as Sundays.
+            weekday_flags = {"weekday": (1, 1, 1, 1, 1, 0, 0),
+                             "saturday": (0, 0, 0, 0, 0, 1, 0),
+                             "sunday": (0, 0, 0, 0, 0, 0, 1)}
+            flags = weekday_flags[typ]
+            data["calendar.txt"].append(dict(service_id=sid,
+                **dict(zip(("monday", "tuesday", "wednesday", "thursday",
+                            "friday", "saturday", "sunday"), flags)),
+                start_date=start.strftime("%Y%m%d"),
+                end_date=(start + timedelta(days=days - 1)).strftime("%Y%m%d")))
             for n in range(days):
                 day = start + timedelta(days=n)
-                if service_day_type(day) == typ:
-                    data["calendar_dates.txt"].append(dict(service_id=sid, date=day.strftime("%Y%m%d"), exception_type=1))
-            if not any(x["service_id"] == sid for x in data["calendar_dates.txt"]):
-                continue
+                regular_type = ("weekday" if day.weekday() < 5 else
+                                "saturday" if day.weekday() == 5 else "sunday")
+                effective_type = service_day_type(day)
+                if regular_type == effective_type:
+                    continue
+                date_str = day.strftime("%Y%m%d")
+                if typ == regular_type:
+                    data["calendar_dates.txt"].append(dict(
+                        service_id=sid, date=date_str, exception_type=2))
+                elif typ == effective_type:
+                    data["calendar_dates.txt"].append(dict(
+                        service_id=sid, date=date_str, exception_type=1))
             windows = intervals(row, typ)
             for j, (a, b, headway) in enumerate(windows):
                 if b <= a:
