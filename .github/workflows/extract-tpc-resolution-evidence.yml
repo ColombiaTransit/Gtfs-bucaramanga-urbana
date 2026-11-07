@@ -1,0 +1,26 @@
+name: Extract TPC resolution evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download existing AMB archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 42295672543 --repo ColombiaTransit/Gtfs-bucaramanga-urbana --name amb-resolutions-archive --dir data/sources/amb_resolutions
+      - name: Index archived resolution text
+        run: python scripts/extract_tpc_resolution_evidence.py
+      - name: Commit shared evidence index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/registers/transport_source_evidence.csv data/registers/amb_extraction_review.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data: index TPC resolution evidence from archived PDF text"
+            git push
+          fi
