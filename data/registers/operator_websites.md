@@ -9,6 +9,8 @@ This register records operator websites for eventual GTFS `agency.txt` creation.
 
 | transcolombia | TRANSCOLOMBIA | https://transcolombia.com.co/ | | Operator homepage supplied by project maintainer | Homepage supplied by maintainer; route sources not yet assessed | https://transcolombia.com.co/ | Candidate `agency_url`; verify legal name, route inventory and operator assignments before GTFS generation. |
 
+| lusitania | Transportes Lusitania | https://transporteslusitania.com/ | https://transporteslusitania.com/index.php/about/ | Official operator route images | Website and four timetable images checked; current validity unverified | https://transporteslusitania.com/ | Images include Rionegro and Playón services; check TPC scope before GTFS inclusion. |
+
 ## GTFS mapping policy
 
 - `agency_name`: use the confirmed public operator name.
