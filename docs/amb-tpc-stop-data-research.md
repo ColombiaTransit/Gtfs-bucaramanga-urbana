@@ -20,3 +20,14 @@
 ## Status
 
 Research leads identified; no authoritative machine-readable stop inventory has yet been verified or ingested. Next task is obtaining and examining the PMM cartographic annex and the 2023 stop study.
+
+## Follow-up discovery — 2026-11-07
+
+- **Independent municipal-council copy of the Floridablanca stop report:** https://concejobga.cloud/descargas/CONTROL_POLITICO_AREAMETROPOLITA_ENERO_2024.pdf . This reproduces the AMB statement that technically established stops are attached in **PDF and Excel** and includes the map labelled *FLORIDABLANCA Paraderos TPC - SITM*. This is **corroboration of an annex's existence**, not the actual annex; no stop coordinates were retrieved.
+- **AMB 2025 technical report:** https://www.amb.gov.co/download/39824/ , index includes figure 20 *Georreferenciación de paraderos de transporte público* (page 101 in its contents). A figure is not a point dataset; retain only as an additional provenance lead.
+- **Metrolínea 2024 operating report:** https://metrolinea.gov.co/v3.0/sites/default/files/informe_de_gestion_cuarto_trimestre_2024_ok_firmado.pdf notes some SITM stations functioning as stops and integration with TPC. This does not prove a general TPC stop list; do not automatically import SITM stations.
+- Search results for public ArcGIS stop layers were mainly for Bogotá and other unrelated cities; geographic extent must be verified before considering any candidate.
+
+### Research decision
+
+The 2022 cartographic RAR annex was downloaded and inventoried (run 42353600245), and the two candidate transport maps inspected (run 42353740316). Neither yielded a machine-readable TPC stop dataset. Close that PDF-map line of investigation. Priority remains locating the **original 2023 Floridablanca PDF/Excel stop annex**, followed by source-qualified OSM stop candidates along the 45 official AMB route KML geometries. No unsupported GTFS-Flex hail-and-ride assumptions.
