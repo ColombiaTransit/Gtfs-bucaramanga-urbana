@@ -11,8 +11,8 @@ on:
     paths:
       - "scripts/build_continuous_gtfs.py"
       - "scripts/colombia_service_calendar.py"
-      - "data/gtfs_routes.csv"
-      - "data/kml/**"
+      - "scripts/prepare_amb_gtfs.py"
+      - "data/sources/amb_tpc_routes/**"
       - ".github/workflows/build-validate-gtfs.yml"
 
 permissions:
@@ -28,6 +28,8 @@ jobs:
           python-version: "3.12"
       - name: Install Colombian holidays
         run: python -m pip install "holidays>=0.60,<1"
+      - name: Prepare manifest from committed AMB source register
+        run: python scripts/prepare_amb_gtfs.py --source data/sources/amb_tpc_routes --output dist/gtfs_routes.csv
       - name: Build GTFS
         shell: bash
         run: |
@@ -37,8 +39,8 @@ jobs:
             ARGS+=(--start-date "${{ inputs.start_date }}")
           fi
           python scripts/build_continuous_gtfs.py \
-            --manifest data/gtfs_routes.csv \
-            --kml-dir data/kml \
+            --manifest dist/gtfs_routes.csv \
+            --kml-dir data/sources/amb_tpc_routes \
             --output dist/gtfs.zip \
             --days 365 "${ARGS[@]}"
       - name: Download MobilityData GTFS Schedule Validator
@@ -63,6 +65,7 @@ jobs:
         with:
           name: buc-gtfs-and-validator
           path: |
+            dist/gtfs_routes.csv
             dist/gtfs.zip
             dist/validation/
           if-no-files-found: warn
