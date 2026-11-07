@@ -1,0 +1,68 @@
+name: Build and validate Bucaramanga GTFS
+
+on:
+  workflow_dispatch:
+    inputs:
+      start_date:
+        description: "First service date (YYYY-MM-DD); empty = today"
+        required: false
+        type: string
+  push:
+    paths:
+      - "scripts/build_continuous_gtfs.py"
+      - "scripts/colombia_service_calendar.py"
+      - "data/gtfs_routes.csv"
+      - "data/kml/**"
+      - ".github/workflows/build-validate-gtfs.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Colombian holidays
+        run: python -m pip install "holidays>=0.60,<1"
+      - name: Build GTFS
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARGS=()
+          if [[ -n "${{ inputs.start_date || '' }}" ]]; then
+            ARGS+=(--start-date "${{ inputs.start_date }}")
+          fi
+          python scripts/build_continuous_gtfs.py \
+            --manifest data/gtfs_routes.csv \
+            --kml-dir data/kml \
+            --output dist/gtfs.zip \
+            --days 365 "${ARGS[@]}"
+      - name: Download MobilityData GTFS Schedule Validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            "https://github.com/MobilityData/gtfs-validator/releases/latest/download/gtfs-validator.jar" \
+            -o /tmp/gtfs-validator.jar
+          test -s /tmp/gtfs-validator.jar
+      - name: Validate GTFS
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/validation
+          java -jar /tmp/gtfs-validator.jar \
+            -i dist/gtfs.zip \
+            -o dist/validation
+      - name: Upload GTFS and validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buc-gtfs-and-validator
+          path: |
+            dist/gtfs.zip
+            dist/validation/
+          if-no-files-found: warn
