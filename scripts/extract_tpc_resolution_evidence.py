@@ -3,6 +3,7 @@
 Candidate mentions are not treated as verified operational facts.
 """
 import argparse, csv, json, re
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 REGISTER=Path("data/registers/transport_source_evidence.csv")
@@ -16,64 +17,53 @@ def main():
     docs={(str(d.get("resolution_year")),str(d.get("resolution_number"))):d for d in manifest["documents"]}
     with REGISTER.open(newline="",encoding="utf-8") as f:
         reader=csv.DictReader(f); fields=reader.fieldnames; rows=list(reader)
-    report=[]
-    for row in rows:
-        if row["source_type"]!="operating_resolution" or row["year"]!="2026":continue
+    def extract_one(row):
         doc=docs.get((row["year"],row["source_id"]))
         if not doc:
-            row["content_review_status"]="blocked"
-            row["review_notes"]="Resolution not found in manifest"
-            continue
+            return {"record_id":row["record_id"],"status":"missing_manifest","candidate_pages":[]}
         sha=doc.get("download",{}).get("sha256")
-        text_path=archive/"text"/(str(sha)+".txt")
-        if not sha or not text_path.exists():
-            row["content_review_status"]="blocked"
-            row["review_notes"]="Archived extracted text unavailable"
-            continue
-        content=text_path.read_text(encoding="utf-8",errors="replace")
-        page_chunks=re.split(r"(?=--- Page \d+ \([^)]*\) ---)",content)
-        evidence=[]
-        for chunk in page_chunks:
-            page=re.search(r"--- Page (\d+)",chunk)
-            if not page:continue
-            hits=[]
-            for kind,pattern in [
-                ("route",r"\b(?:ruta|recorrido|itinerario|trayecto)s?\b"),
-                ("frequency",r"\b(?:frecuencia|intervalo)s?\b"),
-                ("hours",r"\b(?:horario|primer\s+despacho|ultimo\s+despacho|último\s+despacho)s?\b"),
-                ("legal",r"\b(?:modifica|deroga|revoca|sustituye|vigencia)\b")]:
-                if re.search(pattern,chunk,re.I):hits.append(kind)
-            if hits:evidence.append({"page":int(page.group(1)),"topics":hits})
-        row["content_review_status"]="pending_manual_validation"
-        row["evidence_reference"]="; ".join("p%d:%s"%(e["page"],"/".join(e["topics"])) for e in evidence)[:1500]
-        row["review_notes"]="Automated keyword index only; no route/headway/hour claims verified. Text SHA256: "+sha
-        report.append({"record_id":row["record_id"],"text_chars":len(content),"candidate_pages":evidence})
-    with REGISTER.open("w",newline="",encoding="utf-8") as f:
-        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rows)
-    # Persist limited source excerpts for human verification, starting with COTRANDER.
-    # Excerpts are evidence, not interpreted legal or schedule facts.
-    priority=docs.get(("2026","000071"))
-    if priority:
-        sha=priority.get("download",{}).get("sha256")
         source=archive/"text"/(str(sha)+".txt")
-        if source.exists():
-            raw=source.read_text(encoding="utf-8",errors="replace")
-            sections=re.split(r"(?=--- Page \d+ \([^)]*\) ---)",raw)
-            extracts=[]
-            keywords=re.compile(r"frecuencia|intervalo|horario|despacho|ruta|recorrido|vigencia|modifica|deroga",re.I)
-            for section in sections:
-                page=re.search(r"--- Page (\d+)",section)
-                if not page:continue
-                lines=section.splitlines()
-                keep=set()
-                for i,line in enumerate(lines):
-                    if keywords.search(line):
-                        keep.update(range(max(0,i-3),min(len(lines),i+5)))
-                if keep:
-                    extracts.append({"page":int(page.group(1)),"excerpts":"\n".join(lines[i] for i in sorted(keep))[:18000]})
-            dest=Path("data/registers/amb_cotrander_000071_evidence.json")
-            dest.write_text(json.dumps({"source_resolution":"000071-2026","source_sha256":sha,"excerpts":extracts},ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+        if not sha or not source.exists():
+            return {"record_id":row["record_id"],"status":"missing_text","candidate_pages":[]}
+        raw=source.read_text(encoding="utf-8",errors="replace")
+        sections=re.split(r"(?=--- Page \d+ \([^)]*\) ---)",raw)
+        patterns={"route":r"\b(?:ruta|recorrido|itinerario|trayecto)s?\b",
+                  "frequency":r"\b(?:frecuencia|intervalo)s?\b",
+                  "hours":r"\b(?:horario|primer\s+despacho|ultimo\s+despacho|último\s+despacho)s?\b",
+                  "legal":r"\b(?:modifica|deroga|revoca|sustituye|vigencia)\b"}
+        pages=[]
+        extracts=[]
+        for section in sections:
+            match=re.search(r"--- Page (\d+)",section)
+            if not match:continue
+            page=int(match.group(1))
+            hits=[kind for kind,pattern in patterns.items() if re.search(pattern,section,re.I)]
+            if not hits:continue
+            pages.append({"page":page,"topics":hits})
+            lines=section.splitlines()
+            keep=set()
+            for i,line in enumerate(lines):
+                if any(re.search(p,line,re.I) for p in patterns.values()):
+                    keep.update(range(max(0,i-3),min(len(lines),i+5)))
+            extracts.append({"page":page,"topics":hits,
+                             "excerpts":"\n".join(lines[i] for i in sorted(keep))[:18000],
+                             "source_page_chars":len(section)})
+        dest=Path("data/sources/amb_resolutions/evidence")
+        dest.mkdir(parents=True,exist_ok=True)
+        filename=dest/(row["record_id"]+".json")
+        filename.write_text(json.dumps({
+            "source_resolution":row["source_id"]+"-2026",
+            "record_id":row["record_id"],"source_url":row["source_url"],
+            "source_sha256":sha,"excerpts":extracts,
+            "note":"Unverified extracted source text; no inferred operational claims"
+        },ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+        return {"record_id":row["record_id"],"status":"indexed",
+                "text_chars":len(raw),"candidate_pages":pages,"excerpt_file":str(filename)}
+    targets=[r for r in rows if r["source_type"]=="operating_resolution" and r["year"]=="2026"]
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        report=list(pool.map(extract_one,targets))
+    # Preserve all existing human-reviewed status and values in the central register.
     out=Path("data/registers/amb_extraction_review.json")
     out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("Indexed",len(report),"documents; manual verification still required")
+    print("Indexed",sum(x["status"]=="indexed" for x in report),"of",len(report),"documents; manual verification still required")
 if __name__=="__main__":main()
