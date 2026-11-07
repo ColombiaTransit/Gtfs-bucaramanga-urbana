@@ -46,3 +46,7 @@ Run locally:
 python scripts/prepare_amb_gtfs.py --source data/sources/amb_tpc_routes --output dist/gtfs_routes.csv
 python scripts/build_continuous_gtfs.py --manifest dist/gtfs_routes.csv --kml-dir data/sources/amb_tpc_routes --output dist/gtfs.zip --days 365
 ```
+
+## Compact weekly service calendars
+
+The builder now emits `calendar.txt` with three weekly services per route (weekday, Saturday, Sunday) and `calendar_dates.txt` with only Colombian holiday overrides. A holiday falling on a weekday or Saturday removes that day's ordinary service (exception_type=2) and adds Sunday service (exception_type=1). A holiday on Sunday requires no override. The generated date range is the configured `--start-date` and `--days`. This replaces the former one-row-per-route-per-day exception calendar, without changing the service-day assumptions.
