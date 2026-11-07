@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Inspect AMB cartographic annex without committing the large source archive."""
-import json, os, re, sys, zipfile, hashlib
+import json, os, re, sys, zipfile, hashlib, subprocess
 from pathlib import Path
 from urllib.parse import urljoin
 import requests
@@ -52,8 +52,24 @@ try:
             report["members"]=members
             report["stop_candidates"]=[m for m in members if re.search(r"parad|parader|estacion|station|stop|transporte|tpc",m["name"],re.I)]
             report["status"]="zip_inventoried"
+        elif path.open("rb").read(8).startswith(b"Rar!"):
+            proc=subprocess.run(["7z","l","-slt",str(path)],capture_output=True,text=True,timeout=180)
+            if proc.returncode:
+                raise RuntimeError("7z list failed: "+proc.stderr[-1500:])
+            entries=[]
+            for block in proc.stdout.split("\n\n"):
+                fields={}
+                for line in block.splitlines():
+                    if " = " in line:
+                        k,v=line.split(" = ",1)
+                        fields[k]=v
+                if fields.get("Path") and fields.get("Size") and fields.get("Folder")!="+":
+                    entries.append({"name":fields["Path"],"bytes":int(fields["Size"])})
+            report["members"]=entries
+            report["stop_candidates"]=[m for m in entries if re.search(r"parad|parader|estacion|station|stop|transporte|tpc",m["name"],re.I)]
+            report["status"]="rar_inventoried"
         else:
-            report["status"]="downloaded_non_zip"
+            report["status"]="downloaded_unknown_format"
 except Exception as exc:
     report["status"]="error";report["error"]=str(exc)
 (out/"report.json").write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n")
