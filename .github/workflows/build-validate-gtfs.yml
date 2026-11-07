@@ -16,7 +16,7 @@ on:
       - ".github/workflows/build-validate-gtfs.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-validate:
@@ -69,3 +69,20 @@ jobs:
             dist/gtfs.zip
             dist/validation/
           if-no-files-found: warn
+
+      - name: Publish public GitHub Release with stable GTFS filename
+        if: success() && github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # A versioned release keeps historical snapshots; the asset name is stable.
+          TAG="v$(date -u +%Y.%m.%d)-${GITHUB_RUN_NUMBER}"
+          cp dist/gtfs.zip dist/gtfs-bucaramanga-urbana.zip
+          gh release create "$TAG" dist/gtfs-bucaramanga-urbana.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Bucaramanga urbana GTFS $TAG" \
+            --notes "GTFS generated from the committed AMB route register and 45 KML shapes. Uses weekly service calendars and Colombian holiday exceptions. Saturday and Sunday use low-demand frequencies; journey durations and terminal stops are provisional. MobilityData validator completed successfully in workflow run ${GITHUB_RUN_ID}. See Actions artifacts for the validation report." \
+            --latest
