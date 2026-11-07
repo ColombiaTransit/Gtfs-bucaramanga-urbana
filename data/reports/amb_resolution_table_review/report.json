@@ -1,0 +1,13 @@
+{
+  "resolution_count": 13,
+  "amb_route_count": 45,
+  "candidate_table_blocks": 39,
+  "candidate_match_statuses": {
+    "operator_code_candidate": 18,
+    "code_only_other_operator": 19,
+    "code_not_in_amb": 2
+  },
+  "visual_review_queue": 29,
+  "scope": "Candidate-only; archived excerpts can omit table cells or historical context. No facts auto-verified.",
+  "preservation": "No source register, verified evidence or GTFS modified."
+}
