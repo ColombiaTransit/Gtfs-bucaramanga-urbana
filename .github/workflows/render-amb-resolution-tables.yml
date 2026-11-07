@@ -1,0 +1,46 @@
+name: Render three AMB resolution table pages
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download previously archived PDFs (no new scraping)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/amb-archive
+          gh run download 42295672543 --repo "${{ github.repository }}" --name amb-resolutions-archive --dir /tmp/amb-archive
+      - name: Install PDF renderer
+        run: python -m pip install pymupdf
+      - name: Render source pages as PNG
+        run: |
+          python - <<'PY'
+          import json,fitz
+          from pathlib import Path
+          root=Path("/tmp/amb-archive")
+          out=Path("resolution-table-pages");out.mkdir(exist_ok=True)
+          for number,page,route in [("000078",8,43),("000082",9,45),("000092",15,50)]:
+              e=json.loads(Path(f"data/sources/amb_resolutions/evidence/AMB-2026-{number}.json").read_text())
+              sha=e["source_sha256"]
+              candidates=list(root.rglob(f"{sha}.pdf"))
+              if len(candidates)!=1:
+                  raise RuntimeError(f"Expected one archived PDF for {number}, found {len(candidates)}")
+              doc=fitz.open(candidates[0])
+              if not 1<=page<=len(doc):
+                  raise RuntimeError(f"Invalid page {page} for {number}: {len(doc)} pages")
+              img=doc[page-1].get_pixmap(matrix=fitz.Matrix(2.2,2.2),alpha=False)
+              target=out/f"AMB-2026-{number}-page-{page}-route-{route}.png"
+              img.save(target)
+              print(f"{target}: {img.width}x{img.height}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amb-three-original-table-pages
+          path: resolution-table-pages/*.png
+          retention-days: 90
