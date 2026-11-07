@@ -48,7 +48,7 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 \
-            "https://github.com/MobilityData/gtfs-validator/releases/latest/download/gtfs-validator.jar" \
+            "https://github.com/MobilityData/gtfs-validator/releases/download/v8.0.1/gtfs-validator-8.0.1-cli.jar" \
             -o /tmp/gtfs-validator.jar
           test -s /tmp/gtfs-validator.jar
       - name: Validate GTFS
