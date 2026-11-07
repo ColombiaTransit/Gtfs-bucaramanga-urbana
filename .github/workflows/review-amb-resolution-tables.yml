@@ -1,0 +1,28 @@
+name: Review all AMB resolution route tables
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare extracted resolution table candidates to 45 AMB routes
+        run: python3 scripts/review_amb_resolution_tables.py
+      - name: Upload review results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-resolution-table-review
+          path: data/reports/amb_resolution_table_review/
+          if-no-files-found: warn
+      - name: Commit review reports only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reports/amb_resolution_table_review/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: record AMB resolution table review candidates"
+            git push
+          fi
