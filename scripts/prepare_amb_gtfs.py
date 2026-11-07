@@ -51,7 +51,13 @@ def main():
         parser.error("--speed-kmh must be between 5 and 50")
     with (args.source / "routes.csv").open(encoding="utf-8-sig", newline="") as file:
         source_rows = list(csv.DictReader(file))
-    manifest = json.loads((args.source / "kml_manifest.json").read_text(encoding="utf-8"))
+    manifest_text = (args.source / "kml_manifest.json").read_text(encoding="utf-8")
+    # Source scraper currently appends a literal backslash-n after the JSON array.
+    # Tolerate that known trailing artifact, but reject any other trailing data.
+    manifest_text = manifest_text.rstrip()
+    if manifest_text.endswith(chr(92) + "n"):
+        manifest_text = manifest_text[:-2].rstrip()
+    manifest = json.loads(manifest_text)
     by_code = {str(item["route_code"]).strip(): item for item in manifest}
     if len(by_code) != len(manifest):
         raise ValueError("duplicate KML route codes")
