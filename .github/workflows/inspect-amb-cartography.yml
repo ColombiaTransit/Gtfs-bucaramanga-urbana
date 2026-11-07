@@ -9,6 +9,8 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
+      - name: Install RAR archive listing utility
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq p7zip-full
       - run: pip install requests beautifulsoup4
       - name: Download and inventory official annex
         run: python scripts/inspect_amb_cartography.py
