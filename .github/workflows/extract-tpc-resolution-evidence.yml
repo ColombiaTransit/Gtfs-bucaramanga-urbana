@@ -19,7 +19,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/registers/transport_source_evidence.csv data/registers/amb_extraction_review.json
+          git add data/registers/transport_source_evidence.csv data/registers/amb_extraction_review.json data/registers/amb_cotrander_000071_evidence.json
           if ! git diff --cached --quiet; then
             git commit -m "data: index TPC resolution evidence from archived PDF text"
             git push
