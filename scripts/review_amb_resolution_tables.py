@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Conservative, read-only review of AMB resolution route tables against official AMB catalogue.
+"""Conservative, read-only review of resolutions against authoritative AMB-published route data.
 
-A candidate is never called verified automatically. Missing or OCR-damaged numeric cells
+AMB-published operating values are the default GTFS baseline; legal discrepancies are flagged. Missing or OCR-damaged numeric cells
 are queued for visual inspection only on the specific page.
 """
 import csv,json,re,unicodedata
@@ -77,7 +77,7 @@ for e in legal:
                  "extracted_fields":json.dumps(found,ensure_ascii=False),
                  "differences_to_review":"; ".join(issues),
                  "missing_or_unreadable_fields":";".join(missing),
-                 "verification_status":"requires_source_context_review"}
+                 "verification_status":"AMB_publication_authoritative_resolution_candidate_unverified"}
             review.append(row)
             if missing or issues:
                 visual.append({"resolution":e["record_id"],"page":p,"route_code":route_code,
@@ -91,7 +91,7 @@ write_csv(OUT/"visual_review_queue.csv",visual,["resolution","page","route_code"
 report={"resolution_count":len(legal),"amb_route_count":len(routes),
         "candidate_table_blocks":len(review),"candidate_match_statuses":dict(Counter(r["match_status"] for r in review)),
         "visual_review_queue":len(visual),
-        "scope":"Candidate-only; archived excerpts can omit table cells or historical context. No facts auto-verified.",
+        "scope":"AMB-published routes, frequencies and departure windows are authoritative GTFS defaults. Resolution candidates are legal context; excerpts can omit cells or historical context.",
         "preservation":"No source register, verified evidence or GTFS modified."}
 (OUT/"report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print(json.dumps(report,ensure_ascii=False,indent=2))
