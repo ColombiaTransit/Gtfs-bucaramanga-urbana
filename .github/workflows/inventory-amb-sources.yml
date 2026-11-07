@@ -1,0 +1,61 @@
+name: Inventory AMB GTFS source files
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inventory route, geometry and schedule sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/source-inventory
+          python - <<'PY'
+          from pathlib import Path
+          import csv
+          import json
+          import zipfile
+
+          root = Path(".")
+          extensions = {".csv", ".json", ".geojson", ".kml", ".kmz", ".xlsx", ".xls", ".zip", ".xml", ".yml", ".yaml"}
+          ignored = {".git", ".venv", "node_modules", "dist", "__pycache__"}
+          entries = []
+          for path in sorted(root.rglob("*")):
+              if not path.is_file() or any(part in ignored for part in path.parts):
+                  continue
+              if path.suffix.lower() not in extensions:
+                  continue
+              item = {"path": path.as_posix(), "bytes": path.stat().st_size}
+              if path.suffix.lower() == ".csv":
+                  try:
+                      with path.open(encoding="utf-8-sig", newline="") as f:
+                          reader = csv.reader(f)
+                          item["columns"] = next(reader, [])
+                          item["sample_rows"] = [row for _, row in zip(range(2), reader)]
+                  except (OSError, UnicodeError, csv.Error) as exc:
+                      item["read_error"] = str(exc)
+              elif path.suffix.lower() in (".zip", ".kmz"):
+                  try:
+                      with zipfile.ZipFile(path) as z:
+                          item["archive_files"] = z.namelist()[:100]
+                  except (OSError, zipfile.BadZipFile) as exc:
+                      item["read_error"] = str(exc)
+              entries.append(item)
+          out = Path("dist/source-inventory/source-files.json")
+          out.write_text(json.dumps(entries, indent=2, ensure_ascii=False), encoding="utf-8")
+          print(f"Discovered {len(entries)} candidate source files")
+          for item in entries:
+              print(f"{item['path']} ({item['bytes']} bytes)")
+              if "columns" in item:
+                  print(f"  columns: {item['columns']}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amb-source-inventory
+          path: dist/source-inventory/source-files.json
