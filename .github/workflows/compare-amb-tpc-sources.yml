@@ -1,0 +1,26 @@
+name: Compare AMB routes with source and resolution registers
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate read-only comparison
+        run: python3 scripts/compare_amb_tpc_sources.py
+      - name: Upload comparison
+        uses: actions/upload-artifact@v4
+        with:
+          name: amb-tpc-reconciliation
+          path: data/reports/amb_tpc_reconciliation/
+      - name: Commit comparison reports only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reports/amb_tpc_reconciliation/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: compare AMB routes against operator and resolution evidence"
+            git push
+          fi
