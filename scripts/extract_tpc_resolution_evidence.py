@@ -58,11 +58,11 @@ def main():
         source=archive/"text"/(str(sha)+".txt")
         if source.exists():
             raw=source.read_text(encoding="utf-8",errors="replace")
-            sections=re.split(r"(?=--- Page \\d+ \\([^)]*\\) ---)",raw)
+            sections=re.split(r"(?=--- Page \d+ \([^)]*\) ---)",raw)
             extracts=[]
             keywords=re.compile(r"frecuencia|intervalo|horario|despacho|ruta|recorrido|vigencia|modifica|deroga",re.I)
             for section in sections:
-                page=re.search(r"--- Page (\\d+)",section)
+                page=re.search(r"--- Page (\d+)",section)
                 if not page:continue
                 lines=section.splitlines()
                 keep=set()
@@ -70,7 +70,7 @@ def main():
                     if keywords.search(line):
                         keep.update(range(max(0,i-3),min(len(lines),i+5)))
                 if keep:
-                    extracts.append({"page":int(page.group(1)),"excerpts":"\\n".join(lines[i] for i in sorted(keep))[:18000]})
+                    extracts.append({"page":int(page.group(1)),"excerpts":"\n".join(lines[i] for i in sorted(keep))[:18000]})
             dest=Path("data/registers/amb_cotrander_000071_evidence.json")
             dest.write_text(json.dumps({"source_resolution":"000071-2026","source_sha256":sha,"excerpts":extracts},ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
     out=Path("data/registers/amb_extraction_review.json")
