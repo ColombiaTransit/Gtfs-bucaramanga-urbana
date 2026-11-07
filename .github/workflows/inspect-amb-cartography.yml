@@ -1,0 +1,21 @@
+name: Inspect AMB cartographic annex
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests beautifulsoup4
+      - name: Download and inventory official annex
+        run: python scripts/inspect_amb_cartography.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: amb-cartography-inventory
+          path: data/reports/amb_cartography_inventory/report.json
+          retention-days: 90
+          if-no-files-found: warn
