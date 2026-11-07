@@ -56,7 +56,22 @@ def main():
     else:
         with urlopen(Request(URL,headers={"User-Agent":"Mozilla/5.0 ColombiaTransit/1.0"}),timeout=60) as response:raw=response.read()
     routes=parse(raw.decode("utf-8-sig",errors="replace"))
-    if not routes:raise RuntimeError("No route headings found; refusing to overwrite previous snapshot")
+    if not routes:
+        # Keep the actual runner response for diagnosing HTML layout or bot challenges.
+        # Never overwrite the last successful route snapshot with empty data.
+        (out/"failed_source_page.html").write_bytes(raw)
+        soup=BeautifulSoup(raw,"html.parser")
+        diagnostic={
+            "source_url":URL,"response_bytes":len(raw),
+            "title":clean(soup.title.get_text(" ",strip=True)) if soup.title else "",
+            "route_heading_matches":len(soup.find_all(string=re.compile(r"RUTA\\s*#\\s*\\d+",re.I))),
+            "table_count":len(soup.find_all("table")),
+            "iframe_count":len(soup.find_all("iframe")),
+            "body_preview":clean(soup.get_text(" ",strip=True))[:1200],
+        }
+        (out/"failure_diagnostics.json").write_text(json.dumps(diagnostic,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+        print(json.dumps(diagnostic,ensure_ascii=False,indent=2))
+        raise RuntimeError("No routes parsed; raw runner HTML archived for diagnosis")
     (out/"source_page.html").write_bytes(raw)
     (out/"routes.json").write_text(json.dumps(routes,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     with (out/"routes.csv").open("w",newline="",encoding="utf-8") as f:
