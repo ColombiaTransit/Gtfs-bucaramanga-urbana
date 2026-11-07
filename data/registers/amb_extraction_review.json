@@ -1,6 +1,7 @@
 [
   {
     "record_id": "AMB-2026-000071",
+    "status": "indexed",
     "text_chars": 91243,
     "candidate_pages": [
       {
@@ -170,10 +171,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000071.json"
   },
   {
     "record_id": "AMB-2026-000072",
+    "status": "indexed",
     "text_chars": 94934,
     "candidate_pages": [
       {
@@ -353,10 +356,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000072.json"
   },
   {
     "record_id": "AMB-2026-000073",
+    "status": "indexed",
     "text_chars": 114116,
     "candidate_pages": [
       {
@@ -578,10 +583,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000073.json"
   },
   {
     "record_id": "AMB-2026-000074",
+    "status": "indexed",
     "text_chars": 58215,
     "candidate_pages": [
       {
@@ -694,10 +701,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000074.json"
   },
   {
     "record_id": "AMB-2026-000075",
+    "status": "indexed",
     "text_chars": 37657,
     "candidate_pages": [
       {
@@ -765,10 +774,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000075.json"
   },
   {
     "record_id": "AMB-2026-000078",
+    "status": "indexed",
     "text_chars": 41942,
     "candidate_pages": [
       {
@@ -842,10 +853,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000078.json"
   },
   {
     "record_id": "AMB-2026-000079",
+    "status": "indexed",
     "text_chars": 40797,
     "candidate_pages": [
       {
@@ -918,10 +931,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000079.json"
   },
   {
     "record_id": "AMB-2026-000082",
+    "status": "indexed",
     "text_chars": 53316,
     "candidate_pages": [
       {
@@ -1017,10 +1032,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000082.json"
   },
   {
     "record_id": "AMB-2026-000083",
+    "status": "indexed",
     "text_chars": 91673,
     "candidate_pages": [
       {
@@ -1194,10 +1211,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000083.json"
   },
   {
     "record_id": "AMB-2026-000092",
+    "status": "indexed",
     "text_chars": 76571,
     "candidate_pages": [
       {
@@ -1330,10 +1349,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000092.json"
   },
   {
     "record_id": "AMB-2026-000099",
+    "status": "indexed",
     "text_chars": 51008,
     "candidate_pages": [
       {
@@ -1431,10 +1452,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000099.json"
   },
   {
     "record_id": "AMB-2026-000119",
+    "status": "indexed",
     "text_chars": 83403,
     "candidate_pages": [
       {
@@ -1593,10 +1616,12 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000119.json"
   },
   {
     "record_id": "AMB-2026-000125",
+    "status": "indexed",
     "text_chars": 32523,
     "candidate_pages": [
       {
@@ -1659,6 +1684,7 @@
           "legal"
         ]
       }
-    ]
+    ],
+    "excerpt_file": "data/sources/amb_resolutions/evidence/AMB-2026-000125.json"
   }
 ]
