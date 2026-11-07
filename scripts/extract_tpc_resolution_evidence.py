@@ -72,7 +72,7 @@ def main():
                 if keep:
                     extracts.append({"page":int(page.group(1)),"excerpts":"\n".join(lines[i] for i in sorted(keep))[:18000]})
             dest=Path("data/registers/amb_cotrander_000071_evidence.json")
-            dest.write_text(json.dumps({"source_resolution":"000071-2026","source_sha256":sha,"excerpts":extracts},ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+            dest.write_text(json.dumps({"source_resolution":"000071-2026","source_sha256":sha,"excerpts":extracts},ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     out=Path("data/registers/amb_extraction_review.json")
     out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("Indexed",len(report),"documents; manual verification still required")
