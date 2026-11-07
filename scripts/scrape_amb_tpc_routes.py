@@ -15,39 +15,37 @@ def map_id(url):
     p=urlparse(url); q=parse_qs(p.query)
     return (q.get("mid") or q.get("id") or [""])[0]
 def parse(raw):
-    soup=BeautifulSoup(raw,"html.parser"); routes=[]
-    markers = soup.find_all(string=re.compile(r"RUTA\\s*#\\s*\\d+", re.I))
-    seen=set()
-    for marker in markers:
-        title=clean(str(marker))
-        match=re.search(r"RUTA\\s*#\\s*([^\\s]+)",title,re.I)
-        if not match:continue
-        code=match.group(1)
-        if code in seen:continue
-        seen.add(code)
-        heading=marker.parent
+    soup=BeautifulSoup(raw,"html.parser")
+    routes=[]
+    last_iframe=""
+    for node in soup.find_all(["iframe","table"]):
+        if node.name=="iframe":
+            last_iframe=node.get("src","")
+            continue
         row={k:"" for k in FIELDS}
-        row["route_code"]=code
-        row["route_name"]=title[match.end():].strip()
+        for tr in node.find_all("tr"):
+            cells=[clean(x.get_text(" ",strip=True)) for x in tr.find_all(["td","th"],recursive=False)]
+            if len(cells)<2:
+                continue
+            label=cells[0].upper().rstrip(":")
+            field=LABELS.get(label)
+            if label in ("CÓDIGO","CODIGO"):
+                row["route_code"]=cells[1]
+            elif field:
+                row[field]=cells[1]
+            if len(cells)>=4 and cells[2].upper().rstrip(":")=="BAJA DEMANDA":
+                target={"FRECUENCIA VALLE":"frequency_low_demand_min",
+                        "PRIMER DESPACHO":"first_departure_low_demand",
+                        "ULTIMO DESPACHO":"last_departure_low_demand",
+                        "ÚLTIMO DESPACHO":"last_departure_low_demand"}.get(label)
+                if target:row[target]=cells[3]
+        if not row["route_code"] or not row["route_name"]:
+            continue
+        row["map_url"]=last_iframe
+        row["map_id"]=map_id(last_iframe)
         row["source_url"]=URL
-        # The AMB WordPress page uses route titles in styled elements,
-        # not necessarily semantic h1-h6 headings.
-        for node in heading.next_elements:
-            if node is not heading and isinstance(node,str) and re.search(r"RUTA\\s*#\\s*\\d+",node,re.I):break
-            if getattr(node,"name",None)=="iframe" and not row["map_url"]:
-                row["map_url"]=node.get("src","");row["map_id"]=map_id(row["map_url"])
-            if getattr(node,"name",None)!="table":continue
-            for tr in node.find_all("tr"):
-                cells=[clean(x.get_text(" ",strip=True)) for x in tr.find_all(["td","th"],recursive=False)]
-                for i in range(0,len(cells)-1,2):
-                    label=cells[i].upper().rstrip(":")
-                    field=LABELS.get(label)
-                    if field:row[field]=cells[i+1]
-                    if label=="BAJA DEMANDA":
-                        previous=cells[i-2].upper() if i>=2 else ""
-                        target={"FRECUENCIA VALLE":"frequency_low_demand_min","PRIMER DESPACHO":"first_departure_low_demand","ULTIMO DESPACHO":"last_departure_low_demand","ÚLTIMO DESPACHO":"last_departure_low_demand"}.get(previous)
-                        if target:row[target]=cells[i+1]
         routes.append(row)
+        last_iframe=""
     return routes
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--output",default="data/sources/amb_tpc_routes");ap.add_argument("--html");args=ap.parse_args()
