@@ -12,9 +12,9 @@ jobs:
       - name: Download existing AMB archive
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh run download 42295672543 --repo ColombiaTransit/Gtfs-bucaramanga-urbana --name amb-resolutions-archive --dir data/sources/amb_resolutions
+        run: gh run download 42295672543 --repo ColombiaTransit/Gtfs-bucaramanga-urbana --name amb-resolutions-archive --dir "$RUNNER_TEMP/amb-resolutions-archive"
       - name: Index archived resolution text
-        run: python scripts/extract_tpc_resolution_evidence.py
+        run: python scripts/extract_tpc_resolution_evidence.py --archive "$RUNNER_TEMP/amb-resolutions-archive"
       - name: Commit shared evidence index
         run: |
           git config user.name "github-actions[bot]"
