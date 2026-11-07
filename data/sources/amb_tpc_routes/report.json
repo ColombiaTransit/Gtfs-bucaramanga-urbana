@@ -1,7 +1,10 @@
 {
+  "kml_downloaded": 45,
+  "kml_failed": 0,
+  "kml_with_linestrings": 45,
   "source_url": "https://www.amb.gov.co/rutas-publico-colectivo-complementario/",
-  "checked_at_utc": "2026-11-07T07:28:59.071025+00:00",
-  "source_sha256": "b57bb541200320ae3b9c18014c88dc157c1aa8969ba4bed1759a88066381934f",
+  "checked_at_utc": "2026-11-07T07:32:13.942627+00:00",
+  "source_sha256": "cb969cb4d5acc50b7533871793da6e7c6505c1c59fe70bd6fe5a8e3796760689",
   "route_count": 45,
   "map_count": 45,
   "operators": [
