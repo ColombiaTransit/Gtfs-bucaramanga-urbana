@@ -13,13 +13,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh run download 42295672543 --repo ColombiaTransit/Gtfs-bucaramanga-urbana --name amb-resolutions-archive --dir "$RUNNER_TEMP/amb-resolutions-archive"
-      - name: Index archived resolution text
+      - name: Extract all 13 resolution source excerpts in parallel
         run: python scripts/extract_tpc_resolution_evidence.py --archive "$RUNNER_TEMP/amb-resolutions-archive"
-      - name: Commit shared evidence index
+      - name: Upload all extracted source excerpts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tpc-resolution-evidence-all
+          path: |
+            data/registers/amb_extraction_review.json
+            data/sources/amb_resolutions/evidence/
+      - name: Commit source excerpts (no verified register changes)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/registers/transport_source_evidence.csv data/registers/amb_extraction_review.json data/registers/amb_cotrander_000071_evidence.json
+          git add data/registers/amb_extraction_review.json data/sources/amb_resolutions/evidence/
           if ! git diff --cached --quiet; then
             git commit -m "data: index TPC resolution evidence from archived PDF text"
             git push
