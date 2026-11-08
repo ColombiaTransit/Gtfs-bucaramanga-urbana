@@ -47,6 +47,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: bucaramanga-source-snapshots
           path: data/sources/raw/
           if-no-files-found: warn

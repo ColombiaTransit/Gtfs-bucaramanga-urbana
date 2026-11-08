@@ -18,6 +18,7 @@ jobs:
       - name: Upload all extracted source excerpts
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: tpc-resolution-evidence-all
           path: |
             data/registers/amb_extraction_review.json

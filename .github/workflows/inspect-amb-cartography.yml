@@ -19,5 +19,5 @@ jobs:
         with:
           name: amb-cartography-inventory
           path: data/reports/amb_cartography_inventory/report.json
-          retention-days: 90
+          retention-days: 7
           if-no-files-found: warn

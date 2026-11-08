@@ -21,6 +21,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: transcolombia-route-data
           path: data/sources/transcolombia/
           if-no-files-found: warn

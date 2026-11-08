@@ -19,6 +19,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: transpiedecuesta-source-maps
           path: data/sources/transpiedecuesta/
           if-no-files-found: warn
