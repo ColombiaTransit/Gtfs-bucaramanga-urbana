@@ -43,4 +43,4 @@ jobs:
         with:
           name: amb-three-original-table-pages
           path: resolution-table-pages/*.png
-          retention-days: 90
+          retention-days: 7

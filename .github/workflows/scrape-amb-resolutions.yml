@@ -41,7 +41,7 @@ jobs:
         with:
           name: amb-resolutions-archive
           path: data/sources/amb_resolutions/
-          retention-days: 90
+          retention-days: 7
           if-no-files-found: warn
       - name: Commit source inventory
         if: success()

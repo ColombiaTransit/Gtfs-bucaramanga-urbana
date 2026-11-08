@@ -57,5 +57,6 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: amb-source-inventory
           path: dist/source-inventory/source-files.json
